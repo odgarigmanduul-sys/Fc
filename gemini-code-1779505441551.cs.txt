@@ -1,0 +1,122 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+
+[System.Serializable]
+public class Reward
+{
+    public int gems;
+    public int xp;
+    public string lootbox;
+}
+
+[System.Serializable]
+public class LessonTemplate
+{
+    public string id;
+    public string tier;
+    public string prompt;
+    public string audio_ref;
+    public string vfx_target;
+    public Reward reward;
+}
+
+[System.Serializable]
+public class MongolingoData
+{
+    public int total_lessons;
+    public int languages;
+    public LessonTemplate lesson_template;
+}
+
+public class MoneylingoApp : MonoBehaviour
+{
+    [Header("UI References")]
+    public Text promptText;
+    public Text statusText;
+    public Text walletText;
+
+    [Header("Visual Effects (Shader)")]
+    public Material omniFXMaterial; 
+    [Range(0, 3)] public int currentWagerLevel = 0;
+
+    private int myGems = 0;
+    private int myXP = 0;
+    private string activeLootbox = "None";
+
+    private MongolingoData gameData;
+
+    void Start()
+    {
+        LoadGameData();
+        UpdateUI();
+        ApplyShaderEffect();
+    }
+
+    void LoadGameData()
+    {
+        // JSON өгөгдлийг текст хэлбэрээр оруулсан хэсэг
+        string jsonString = @"{
+            ""total_lessons"": 15000,
+            ""languages"": 30,
+            ""lesson_template"": {
+                ""id"": ""ENG_500_GOD"",
+                ""tier"": ""C2"",
+                ""prompt"": ""Explain the concept of Quantum Entanglement in English."",
+                ""audio_ref"": ""native_tutor_voice_500.mp3"",
+                ""vfx_target"": ""SINGULARITY_EXPLOSION"",
+                ""reward"": { ""gems"": 5000, ""xp"": 1000, ""lootbox"": ""Mythic"" }
+            }
+        }";
+
+        gameData = JsonUtility.FromJson<MongolingoData>(jsonString);
+        
+        if (promptText != null && gameData != null)
+        {
+            promptText.text = $"[{gameData.lesson_template.tier}] {gameData.lesson_template.prompt}";
+        }
+    }
+
+    // Товчлуур дээр дарахад ажиллах үндсэн функц
+    public void CompleteLesson()
+    {
+        if (gameData == null) return;
+
+        myGems += gameData.lesson_template.reward.gems;
+        myXP += gameData.lesson_template.reward.xp;
+        activeLootbox = gameData.lesson_template.reward.lootbox;
+
+        if (statusText != null)
+        {
+            statusText.text = $"Амжилттай! +{gameData.lesson_template.reward.gems} Gems авлаа! 🎉";
+        }
+
+        UpgradeVFX();
+        UpdateUI();
+    }
+
+    void UpgradeVFX()
+    {
+        if (currentWagerLevel < 3)
+        {
+            currentWagerLevel++;
+            ApplyShaderEffect();
+        }
+    }
+
+    void ApplyShaderEffect()
+    {
+        if (omniFXMaterial != null)
+        {
+            omniFXMaterial.SetFloat("_WagerLevel", currentWagerLevel);
+        }
+    }
+
+    void UpdateUI()
+    {
+        if (walletText != null)
+        {
+            walletText.text = $"Эрдэнэс (Gems): {myGems}\nТуршлага (XP): {myXP}\nХайрцаг: {activeLootbox}\nЭффект Түвшин: {currentWagerLevel}";
+        }
+    }
+}

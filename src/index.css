@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-spin-slow: spin 12s linear infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-super-saiyan: super-saiyan 1.2s ease-in-out infinite;
+  --animate-cosmic-shift: cosmic-shift 6s linear infinite;
+  --animate-rainbow-glow: rainbow-glow 4s linear infinite;
+  --animate-avatar-state: avatar-state 1.8s ease-in-out infinite;
+  --animate-lightning-aura: lightning-aura 0.4s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { filter: drop-shadow(0 0 6px #a855f7) brightness(1); }
+    50% { filter: drop-shadow(0 0 20px #c084fc) brightness(1.35); }
+  }
+  @keyframes super-saiyan {
+    0%, 100% { filter: drop-shadow(0 0 10px #fbbf24) brightness(1) saturate(1.2); }
+    50% { filter: drop-shadow(0 0 28px #ea580c) brightness(1.4) saturate(2.2); }
+  }
+  @keyframes cosmic-shift {
+    0% { filter: hue-rotate(0deg) drop-shadow(0 0 12px #ec4899); }
+    50% { filter: hue-rotate(180deg) drop-shadow(0 0 25px #06b6d4); }
+    100% { filter: hue-rotate(360deg) drop-shadow(0 0 12px #ec4899); }
+  }
+  @keyframes rainbow-glow {
+    0% { box-shadow: 0 0 15px #ef4444, inset 0 0 10px #ef4444; }
+    25% { box-shadow: 0 0 15px #3b82f6, inset 0 0 10px #3b82f6; }
+    50% { box-shadow: 0 0 15px #10b981, inset 0 0 10px #10b981; }
+    75% { box-shadow: 0 0 15px #f59e0b, inset 0 0 10px #f59e0b; }
+    100% { box-shadow: 0 0 15px #ef4444, inset 0 0 10px #ef4444; }
+  }
+  @keyframes avatar-state {
+    0%, 100% { filter: drop-shadow(0 0 12px #ffffff) contrast(1.1); }
+    50% { filter: drop-shadow(0 0 32px #38bdf8) contrast(1.4); }
+  }
+  @keyframes lightning-aura {
+    0%, 100% { filter: drop-shadow(0 0 14px #60a5fa) brightness(1.1); opacity: 0.95; }
+    50% { filter: drop-shadow(0 0 35px #a7f3d0) brightness(1.5); opacity: 1; }
+  }
+}
